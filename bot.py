@@ -11,7 +11,10 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=["start"])
 async def start(message: types.Message):
-    await message.reply("Привет")
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    buttons1 = ["Школа", "Обратная связь", "Канал", "Другое", "Другие проекты"]
+    keyboard.add(*buttons1)
+    await message.reply("Привет", reply_markup=keyboard)
 
 
 if __name__ == '__main__':
