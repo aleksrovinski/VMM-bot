@@ -4,11 +4,15 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.types import message
 from aiogram.utils import executor
 import sqlite3
-import emoji
 from config import token
 
 bot = Bot(token=token)
 dp = Dispatcher(bot)
 
-1111
-1
+@dp.message_handler(commands=["start"])
+async def start(message: types.Message):
+    await message.reply("Привет")
+
+
+if __name__ == '__main__':
+    executor.start_polling(dp)
