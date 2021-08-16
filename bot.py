@@ -40,11 +40,21 @@ async def feedback(message: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="Разработчик", url="t.me/aleksrovi"),
         types.InlineKeyboardButton(text="Github", url="https://github.com/aleksrovinski/VMM-bot/issues"),
-        types.InlineKeyboardButton(text="Прям тут", callback_data="feedback1")
+        #types.InlineKeyboardButton(text="Прям тут", callback_data="feedback1")
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
     await message.reply("Выбири вариант обратной связи:", reply_markup=keyboard)
+#@dp.callback_query_handler(text="feedback1")
+#async def feedbackinbot(call: types.CallbackQuery):
+    #buttons = [
+        #types.InlineKeyboardButton(text="Отзыв", callback_data="otziv"),
+        #types.InlineKeyboardButton(text="Жалоба", callback_data="zaloba"),
+        #types.InlineKeyboardButton(text='Что-то не так в разделе "Школа"', callback_data="school")
+    #]
+    #keyboard = types.InlineKeyboardMarkup(row_width=3)
+    #keyboard.add(*buttons)
+    #await call.message.answer("Начнём с того что вы хотите отправить:", reply_markup=keyboard)
 
 
 
