@@ -12,7 +12,7 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=["start"])
 async def start(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
     buttons1 = ["Школа", "Обратная связь", "Канал", "Другое", "Другие проекты"]
     keyboard.add(*buttons1)
     await message.reply("Привет", reply_markup=keyboard)
@@ -55,8 +55,20 @@ async def feedback(message: types.Message):
     #keyboard = types.InlineKeyboardMarkup(row_width=3)
     #keyboard.add(*buttons)
     #await call.message.answer("Начнём с того что вы хотите отправить:", reply_markup=keyboard)
-
-
-
+@dp.message_handler(lambda message: message.text == "Канал")
+async def kanal(message: types.Message):
+    button = types.InlineKeyboardButton(text="Ссылка", url="t.me/vosmoimemmedia")
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard.add(button)
+    await message.reply("Ссылка:", reply_markup=keyboard)
+@dp.message_handler(lambda message: message.text == "Другое")
+async def other(message: types.Message):
+    await message.reply("Тут пока пусто, из-за миграции на aiogram")
+@dp.message_handler(lambda message: message.text == "Другие проекты")
+async def otherprojects(message: types.Message):
+    button = types.InlineKeyboardButton(text="Github разработчика", url="https://github.com/aleksrovinski")
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard.add(button)
+    await message.reply("Тут все мои публичные проекты", reply_markup=keyboard)
 if __name__ == '__main__':
     executor.start_polling(dp)
