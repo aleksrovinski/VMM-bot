@@ -32,7 +32,7 @@ async def schooldz(message: types.Message):
 async def schooldz(message: types.Message):
     global dz
     await message.reply(dz)
-@dp.message_handler(lambda message: message.text == "Расписание", commands=['lessons'])
+@dp.message_handler(lambda message: message.text == "Расписание")
 async def schoollessons(message: types.Message):
     await message.reply("функция отключена до 1.09.2021")
 @dp.message_handler(commands=["lessons"])
