@@ -34,7 +34,16 @@ async def schooldz(message: types.Message):
     await message.reply(dz)
 @dp.message_handler(lambda message: message.text == "Расписание")
 async def schoollessons(message: types.Message):
-    await message.reply("функция отключена до 1.09.2021")
+    buttons = [
+        types.InlineKeyboardButton(text="ПН", callback_data='pn'),
+        types.InlineKeyboardButton(text="ВТ", callback_data='vt'),
+        types.InlineKeyboardButton(text="СР", callback_data='sr'),
+        types.InlineKeyboardButton(text="ЧТ", callback_data='ht'),
+        types.InlineKeyboardButton(text="ПТ", callback_data='pt'),
+    ]
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard.add(*buttons)
+    await message.reply("функция отключена до 1.09.2021", reply_markup=keyboard)
 @dp.message_handler(commands=["lessons"])
 async def schoollessons(message: types.Message):
     buttons = [
