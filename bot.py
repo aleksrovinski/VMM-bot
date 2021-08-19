@@ -23,10 +23,16 @@ async def school(message: types.Message):
     buttons = ['Расписание', 'ДЗ', 'Назад']
     keyboard.add(*buttons)
     await message.reply('Раздел "Школа"', reply_markup=keyboard)
-@dp.message_handler(lambda message: message.text == "ДЗ")
+@dp.message_handler(lambda message: message.text == "ДЗ", commands=['dz'])
 async def schooldz(message: types.Message):
     await message.reply("функция отключена до 1.09.2021")
-@dp.message_handler(lambda message: message.text == "Расписание")
+@dp.message_handler(commands=["dz"])
+async def schooldz(message: types.Message):
+    await message.reply("функция отключена до 1.09.2021")
+@dp.message_handler(lambda message: message.text == "Расписание", commands=['lessons'])
+async def schoollessons(message: types.Message):
+    await message.reply("функция отключена до 1.09.2021")
+@dp.message_handler(commands=["lessons"])
 async def schoollessons(message: types.Message):
     await message.reply("функция отключена до 1.09.2021")
 @dp.message_handler(lambda message: message.text == "Назад")
