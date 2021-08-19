@@ -5,8 +5,8 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.types import message
 from aiogram.utils import executor
 import sqlite3
-from config import token
-
+from config import token, pn, vt, sr, ht, pt
+from prettytable import PrettyTable
 bot = Bot(token=token)
 dp = Dispatcher(bot)
 
@@ -34,7 +34,16 @@ async def schoollessons(message: types.Message):
     await message.reply("функция отключена до 1.09.2021")
 @dp.message_handler(commands=["lessons"])
 async def schoollessons(message: types.Message):
-    await message.reply("функция отключена до 1.09.2021")
+    buttons = [
+        types.InlineKeyboardButton(text="ПН", callback_data='pn'),
+        types.InlineKeyboardButton(text="ВТ", callback_data='vt'),
+        types.InlineKeyboardButton(text="СР", callback_data='sr'),
+        types.InlineKeyboardButton(text="ЧТ", callback_data='ht'),
+        types.InlineKeyboardButton(text="ПТ", callback_data='pt'),
+    ]
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard.add(*buttons)
+    await message.reply("функция отключена до 1.09.2021", reply_markup=keyboard)
 @dp.message_handler(lambda message: message.text == "Назад")
 async def back(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
@@ -76,5 +85,20 @@ async def otherprojects(message: types.Message):
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(button)
     await message.reply("Тут все мои публичные проекты", reply_markup=keyboard)
+@dp.callback_query_handler(text="pn")
+async def send_random_value(call: types.CallbackQuery):
+    await call.message.answer(pn)
+@dp.callback_query_handler(text="vt")
+async def send_random_value(call: types.CallbackQuery):
+    await call.message.answer(vt)
+@dp.callback_query_handler(text="sr")
+async def send_random_value(call: types.CallbackQuery):
+    await call.message.answer(sr)
+@dp.callback_query_handler(text="ht")
+async def send_random_value(call: types.CallbackQuery):
+    await call.message.answer(ht)
+@dp.callback_query_handler(text="pt")
+async def send_random_value(call: types.CallbackQuery):
+    await call.message.answer(pt)
 if __name__ == '__main__':
     executor.start_polling(dp)
