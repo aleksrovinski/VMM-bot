@@ -5,11 +5,12 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.types import message
 from aiogram.utils import executor
 import sqlite3
-from config import token, pn, vt, sr, ht, pt
+from config import token, pn, vt, sr, ht, pt, admin_id
 from prettytable import PrettyTable
 bot = Bot(token=token)
 dp = Dispatcher(bot)
-
+dz = 'функция отключена до 1.09.2021'
+dzedit = '0'
 @dp.message_handler(commands=["start"])
 async def start(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
@@ -23,12 +24,14 @@ async def school(message: types.Message):
     buttons = ['Расписание', 'ДЗ', 'Назад']
     keyboard.add(*buttons)
     await message.reply('Раздел "Школа"', reply_markup=keyboard)
-@dp.message_handler(lambda message: message.text == "ДЗ", commands=['dz'])
+@dp.message_handler(lambda message: message.text == "ДЗ")
 async def schooldz(message: types.Message):
-    await message.reply("функция отключена до 1.09.2021")
+    global dz
+    await message.reply(dz)
 @dp.message_handler(commands=["dz"])
 async def schooldz(message: types.Message):
-    await message.reply("функция отключена до 1.09.2021")
+    global dz
+    await message.reply(dz)
 @dp.message_handler(lambda message: message.text == "Расписание", commands=['lessons'])
 async def schoollessons(message: types.Message):
     await message.reply("функция отключена до 1.09.2021")
@@ -100,5 +103,40 @@ async def send_random_value(call: types.CallbackQuery):
 @dp.callback_query_handler(text="pt")
 async def send_random_value(call: types.CallbackQuery):
     await call.message.answer(pt)
+@dp.callback_query_handler(text="dzedit", user_id=int(admin_id))
+async def send_random_value(call: types.CallbackQuery):
+    global dzedit
+    button = types.InlineKeyboardButton(text='Отмена', callback_data='cancel')
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard.add(button)
+    await call.message.answer('Введите новое ДЗ или нажмите отмена', reply_markup=keyboard)
+    dzedit = '1'
+@dp.callback_query_handler(text="poweroff", user_id=int(admin_id))
+async def send_random_value(call: types.CallbackQuery):
+    await call.message.answer("Завершаю работу")
+    quit()
+@dp.callback_query_handler(text="cancel", user_id=int(admin_id))
+async def send_random_value(call: types.CallbackQuery):
+    await call.message.answer("На нет и суда нет")
+    global dzedit
+    dzedit = '0'
+@dp.message_handler(commands=['admin'], user_id=int(admin_id))
+async def admin(mes: types.Message):
+    buttons = [
+        types.InlineKeyboardButton(text="Выключить", callback_data='poweroff'),
+        types.InlineKeyboardButton(text="Изменить ДЗ", callback_data='dzedit')
+    ]
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard.add(*buttons)
+    await mes.reply("Что бы вы хотели сделать мой господин?", reply_markup=keyboard)
+    pass
+@dp.message_handler(user_id=int(admin_id))
+async def qwerty(mes: types.Message):
+    global dz
+    global dzedit
+    if dzedit == '1':
+        dz = mes.text
+        dzedit = '0'
+        await mes.reply('Отлично дз имененно на: ' + dz)
 if __name__ == '__main__':
     executor.start_polling(dp)
