@@ -12,28 +12,43 @@ dp = Dispatcher(bot)
 dz = 'функция отключена до 1.09.2021'
 dzedit = '0'
 @dp.message_handler(commands=["start"])
-async def start(message: types.Message):
+async def start(msg: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
-    buttons1 = ["Школа", "Обратная связь", "Канал", "Другое", "Другие проекты"]
+    buttons1 = ["Школа", "Обратная связь", "Канал", "Другое", "Другие проекты", "Решение примеров"]
     keyboard.add(*buttons1)
-    await message.reply("Привет", reply_markup=keyboard)
+    await msg.reply("Привет", reply_markup=keyboard)
+@dp.message_handler(lambda message: message.text == "Решение примеров")
+async def primeri(msg: types.Message):
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
+    buttons1 = ["простых примеров","уравнений ","квадратных уравнений", "Назад"]
+    keyboard.add(*buttons1)
+    await msg.reply("Решение:", reply_markup=keyboard)
 
+@dp.message_handler(lambda message: message.text == "простых примеров")
+async def iziprimeri(msg: types.Message):
+    await msg.reply("Функция недоступна\nВоспользуйтесь калькулятором")
+@dp.message_handler(lambda message: message.text == "уравнений")
+async def yravneni(msg: types.Message):
+    await msg.reply("Функция недоступна\nВоспользуйтесь калькулятором")
+@dp.message_handler(lambda message: message.text == "квадратных уравнений")
+async def primeri(msg: types.Message):
+    await msg.reply("Совсем скоро!")
 @dp.message_handler(lambda message: message.text == "Школа")
-async def school(message: types.Message):
+async def school(msg: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = ['Расписание', 'ДЗ', 'Назад']
     keyboard.add(*buttons)
-    await message.reply('Раздел "Школа"', reply_markup=keyboard)
+    await msg.reply('Раздел "Школа"', reply_markup=keyboard)
 @dp.message_handler(lambda message: message.text == "ДЗ")
-async def schooldz(message: types.Message):
+async def schooldz(msg: types.Message):
     global dz
-    await message.reply(dz)
+    await msg.reply(dz)
 @dp.message_handler(commands=["dz"])
-async def schooldz(message: types.Message):
+async def schooldz(msg: types.Message):
     global dz
-    await message.reply(dz)
+    await msg.reply(dz)
 @dp.message_handler(lambda message: message.text == "Расписание")
-async def schoollessons(message: types.Message):
+async def schoollessons(msg: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="ПН", callback_data='pn'),
         types.InlineKeyboardButton(text="ВТ", callback_data='vt'),
@@ -43,9 +58,9 @@ async def schoollessons(message: types.Message):
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
-    await message.reply("функция отключена до 1.09.2021", reply_markup=keyboard)
+    await msg.reply("функция отключена до 1.09.2021", reply_markup=keyboard)
 @dp.message_handler(commands=["lessons"])
-async def schoollessons(message: types.Message):
+async def schoollessons(msg: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="ПН", callback_data='pn'),
         types.InlineKeyboardButton(text="ВТ", callback_data='vt'),
@@ -55,15 +70,15 @@ async def schoollessons(message: types.Message):
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
-    await message.reply("функция отключена до 1.09.2021", reply_markup=keyboard)
+    await msg.reply("функция отключена до 1.09.2021", reply_markup=keyboard)
 @dp.message_handler(lambda message: message.text == "Назад")
-async def back(message: types.Message):
+async def back(msg: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
     buttons1 = ["Школа", "Обратная связь", "Канал", "Другое", "Другие проекты"]
     keyboard.add(*buttons1)
-    await message.reply("Главное меню", reply_markup=keyboard)
+    await msg.reply("Главное меню", reply_markup=keyboard)
 @dp.message_handler(lambda message: message.text == "Обратная связь")
-async def feedback(message: types.Message):
+async def feedback(msg: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="Разработчик", url="t.me/aleksrovi"),
         types.InlineKeyboardButton(text="Github", url="https://github.com/aleksrovinski/VMM-bot/issues"),
@@ -71,7 +86,7 @@ async def feedback(message: types.Message):
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
-    await message.reply("Выбири вариант обратной связи:", reply_markup=keyboard)
+    await msg.reply("Выбири вариант обратной связи:", reply_markup=keyboard)
 #@dp.callback_query_handler(text="feedback1")
 #async def feedbackinbot(call: types.CallbackQuery):
     #buttons = [
@@ -83,20 +98,20 @@ async def feedback(message: types.Message):
     #keyboard.add(*buttons)
     #await call.message.answer("Начнём с того что вы хотите отправить:", reply_markup=keyboard)
 @dp.message_handler(lambda message: message.text == "Канал")
-async def kanal(message: types.Message):
+async def channel(msg: types.Message):
     button = types.InlineKeyboardButton(text="Ссылка", url="t.me/vosmoimemmedia")
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(button)
     await message.reply("Ссылка:", reply_markup=keyboard)
 @dp.message_handler(lambda message: message.text == "Другое")
-async def other(message: types.Message):
-    await message.reply("Тут пока пусто, из-за миграции на aiogram")
+async def other(msg: types.Message):
+    await msg.reply("Тут пока пусто, из-за миграции на aiogram")
 @dp.message_handler(lambda message: message.text == "Другие проекты")
-async def otherprojects(message: types.Message):
+async def otherprojects(msg: types.Message):
     button = types.InlineKeyboardButton(text="Github разработчика", url="https://github.com/aleksrovinski")
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(button)
-    await message.reply("Тут все мои публичные проекты", reply_markup=keyboard)
+    await msg.reply("Тут все мои публичные проекты", reply_markup=keyboard)
 @dp.callback_query_handler(text="pn")
 async def send_random_value(call: types.CallbackQuery):
     await call.message.answer(pn)
@@ -130,22 +145,22 @@ async def send_random_value(call: types.CallbackQuery):
     global dzedit
     dzedit = '0'
 @dp.message_handler(commands=['admin'], user_id=int(admin_id))
-async def admin(mes: types.Message):
+async def admin(msg: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="Выключить", callback_data='poweroff'),
         types.InlineKeyboardButton(text="Изменить ДЗ", callback_data='dzedit')
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
-    await mes.reply("Что бы вы хотели сделать мой господин?", reply_markup=keyboard)
+    await msg.reply("Что бы вы хотели сделать мой господин?", reply_markup=keyboard)
     pass
 @dp.message_handler(user_id=int(admin_id))
-async def qwerty(mes: types.Message):
+async def qwerty(msg: types.Message):
     global dz
     global dzedit
     if dzedit == '1':
-        dz = mes.text
+        dz = msg.text
         dzedit = '0'
-        await mes.reply('Отлично дз имененно на: ' + dz)
+        await msg.reply('Отлично дз имененно на: ' + dz)
 if __name__ == '__main__':
     executor.start_polling(dp)
