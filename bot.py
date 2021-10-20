@@ -14,17 +14,22 @@ logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(
                     level=logging.INFO,
 
                     )
-
+#Если код выполняется на pythonanywhere.com
 #proxy_url = 'http://proxy.server:3128'
 #bot = Bot(token=token, proxy=proxy_url)
+
+#Обычное выполнение
 bot = Bot(token=token)
 dp = Dispatcher(bot)
+
+#Инциализация переменных
 dz = 'Думаешь я знаю?!'
 dzedit = '0'
+other123 = 'Тут пусто'
 
 @dp.message_handler(commands=["start"])
 async def start(msg: types.Message):
-    #jF = open("users.txt","r")
+    #jF = open("users.txt","r")s
     #jU = set ()
     #for line in jF:
         #jU.add(line.strip())
@@ -39,9 +44,17 @@ async def start(msg: types.Message):
 @dp.message_handler(lambda message: message.text == "Школа")
 async def school(msg: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = ['Расписание', 'ДЗ', 'Назад']
+    buttons = ['Расписание', 'ДЗ', 'Доп инфа', 'Назад']
     keyboard.add(*buttons)
     await msg.reply('Раздел "Школа"', reply_markup=keyboard)
+@dp.message_handler(lambda message: message.text == "Доп инфа")
+async def other1(msg: types.Message):
+    global other123
+    await msg.reply(other123)
+@dp.message_handler(commands=['other'])
+async def other2(msg: types.Message):
+    global other123
+    await msg.reply(other123)
 @dp.message_handler(lambda message: message.text == "ДЗ")
 async def schooldz(msg: types.Message):
     global dz
@@ -105,6 +118,7 @@ async def otherprojects(msg: types.Message):
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(button)
     await msg.reply("Тут все мои публичные проекты", reply_markup=keyboard)
+#Расписание
 @dp.callback_query_handler(text="pn")
 async def pon(call: types.CallbackQuery):
     await call.message.answer(pn)
@@ -120,6 +134,7 @@ async def het(call: types.CallbackQuery):
 @dp.callback_query_handler(text="pt")
 async def pti(call: types.CallbackQuery):
     await call.message.answer(pt)
+#Инструментарий админа
 @dp.callback_query_handler(text="dzedit", user_id=int(admin_id))
 async def dzedit(call: types.CallbackQuery):
     global dzedit
@@ -137,11 +152,20 @@ async def cancel(call: types.CallbackQuery):
     await call.message.answer("На нет и суда нет")
     global dzedit
     dzedit = '0'
+@dp.callback_query_handler(text='othered', user_id=int(admin_id))
+async def othered(call: types.CallbackQuery):
+    global dzedit
+    button = types.InlineKeyboardButton(text='Отмена', callback_data='cancel')
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard.add(button)
+    await call.message.answer("Введите новую доп. инфу или нажмите отмена", reply_markup=keyboard)
+    dzedit = '2'
 @dp.message_handler(commands=['admin'], user_id=int(admin_id))
 async def admin(msg: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="Выключить", callback_data='poweroff'),
-        types.InlineKeyboardButton(text="Изменить ДЗ", callback_data='dzedit')
+        types.InlineKeyboardButton(text="Изменить ДЗ", callback_data='dzedit'),
+        types.InlineKeyboardButton(text="Изменить доп. инфу", callback_data='othered')
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
@@ -151,15 +175,15 @@ async def admin(msg: types.Message):
 async def qwerty(msg: types.Message):
     global dz
     global dzedit
-    global other
+    global other123
     if dzedit == '1':
         dz = msg.text
         dzedit = '0'
         await msg.reply('Отлично дз имененно на: ' + dz)
     elif dzedit == '2':
-        other = msg.text
+        other123 = msg.text
         dzedit = '0'
-        await msg.reply('Отлично, доп информация изменена на:\n' + other)
+        await msg.reply('Отлично, доп информация изменена на:\n' + other123)
     else:
         await msg.reply('Интересно...')
 
