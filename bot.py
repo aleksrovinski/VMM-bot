@@ -24,14 +24,14 @@ dzedit = '0'
 
 @dp.message_handler(commands=["start"])
 async def start(msg: types.Message):
-    #joinedFile = open("users.txt","r")
-    #joinedUsers = set ()
-    #for line in joinedFile:
-        #joinedUsers.add(line.strip())
-    #if not str(msg.chat.id) in joinedUsers:
-        #joinedFile = open("users.txt","a")
-        #joinedFile.write(str(msg.chat.id)+ "\n")
-        #joinedUsers.add(msg.chat.id)
+    #jF = open("users.txt","r")
+    #jU = set ()
+    #for line in jF:
+        #jU.add(line.strip())
+    #if not str(msg.chat.id) in jU:
+        #jF = open("users.txt","a")
+        #jF.write(str(msg.chat.id)+ "\n")
+        #jU.add(msg.chat.id)
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
     buttons1 = ["Школа", "Обратная связь", "Канал", "Другое", "Другие проекты"] # , "Решение примеров"
     keyboard.add(*buttons1)
@@ -151,9 +151,17 @@ async def admin(msg: types.Message):
 async def qwerty(msg: types.Message):
     global dz
     global dzedit
+    global other
     if dzedit == '1':
         dz = msg.text
         dzedit = '0'
         await msg.reply('Отлично дз имененно на: ' + dz)
+    elif dzedit == '2':
+        other = msg.text
+        dzedit = '0'
+        await msg.reply('Отлично, доп информация изменена на:\n' + other)
+    else:
+        await msg.reply('Интересно...')
+
 if __name__ == '__main__':
     executor.start_polling(dp)
