@@ -15,22 +15,23 @@ logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(
 
                     )
 
-proxy_url = 'http://proxy.server:3128'
-bot = Bot(token=token, proxy=proxy_url)
+#proxy_url = 'http://proxy.server:3128'
+#bot = Bot(token=token, proxy=proxy_url)
+bot = Bot(token=token)
 dp = Dispatcher(bot)
 dz = 'Думаешь я знаю?!'
 dzedit = '0'
 
 @dp.message_handler(commands=["start"])
 async def start(msg: types.Message):
-    joinedFile = open("users.txt","r")
-    joinedUsers = set ()
-    for line in joinedFile:
-        joinedUsers.add(line.strip())
-    if not str(msg.chat.id) in joinedUsers:
-        joinedFile = open("users.txt","a")
-        joinedFile.write(str(msg.chat.id)+ "\n")
-        joinedUsers.add(msg.chat.id)
+    #joinedFile = open("users.txt","r")
+    #joinedUsers = set ()
+    #for line in joinedFile:
+        #joinedUsers.add(line.strip())
+    #if not str(msg.chat.id) in joinedUsers:
+        #joinedFile = open("users.txt","a")
+        #joinedFile.write(str(msg.chat.id)+ "\n")
+        #joinedUsers.add(msg.chat.id)
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
     buttons1 = ["Школа", "Обратная связь", "Канал", "Другое", "Другие проекты"] # , "Решение примеров"
     keyboard.add(*buttons1)
