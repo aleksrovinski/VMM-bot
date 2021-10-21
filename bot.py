@@ -6,7 +6,7 @@ from aiogram.types import message
 from aiogram.utils import executor
 import sqlite3
 import time
-from config import token, pn, vt, sr, ht, pt, admin_id
+from config import token, pn, vt, sr, ht, pt, admin_id, study
 from prettytable import PrettyTable
 import logging
 logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',
@@ -71,10 +71,11 @@ async def schoollessons(msg: types.Message):
         types.InlineKeyboardButton(text="СР", callback_data='sr'),
         types.InlineKeyboardButton(text="ЧТ", callback_data='ht'),
         types.InlineKeyboardButton(text="ПТ", callback_data='pt'),
+        types.InlineKeyboardButton(text="Каникул", callback_data='st'),
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
-    await msg.reply("Выбери день недели:", reply_markup=keyboard)
+    await msg.reply("Выбери:", reply_markup=keyboard)
 @dp.message_handler(commands=["lessons"])
 async def schoollessons(msg: types.Message):
     buttons = [
@@ -83,6 +84,7 @@ async def schoollessons(msg: types.Message):
         types.InlineKeyboardButton(text="СР", callback_data='sr'),
         types.InlineKeyboardButton(text="ЧТ", callback_data='ht'),
         types.InlineKeyboardButton(text="ПТ", callback_data='pt'),
+        types.InlineKeyboardButton(text="Каникул", callback_data='st'),
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
@@ -134,6 +136,9 @@ async def het(call: types.CallbackQuery):
 @dp.callback_query_handler(text="pt")
 async def pti(call: types.CallbackQuery):
     await call.message.answer(pt)
+@dp.callback_query_handler(text="st")
+async def stud(call: types.CallbackQuery):
+    await call.message.answer(study)
 #Инструментарий админа
 @dp.callback_query_handler(text="dzedit", user_id=int(admin_id))
 async def dzedit(call: types.CallbackQuery):
@@ -165,7 +170,7 @@ async def admin(msg: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="Выключить", callback_data='poweroff'),
         types.InlineKeyboardButton(text="Изменить ДЗ", callback_data='dzedit'),
-        types.InlineKeyboardButton(text="Изменить доп. инфу", callback_data='othered')
+        types.InlineKeyboardButton(text="Изменить доп. инфу", callback_data='othered'),
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
